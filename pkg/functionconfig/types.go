@@ -543,7 +543,7 @@ func (c *Config) EnrichWithNodeSelectors(nodeSelector map[string]string) {
 	}
 
 	// merge node selectors - precedence to existing node selector
-	c.Spec.NodeSelector = labels.Merge(c.Spec.NodeSelector, nodeSelector)
+	c.Spec.NodeSelector = labels.Merge(nodeSelector, c.Spec.NodeSelector)
 }
 
 func (c *Config) EnrichWithTolerations(tolerations []v1.Toleration) {
@@ -593,7 +593,7 @@ func (c *Config) PruneAffinityNodeSelectorRequirement(nodeSelectorRequirements [
 					// check if its key matches the anti affinity
 					// if it does, we want to remove this expression so it wont block us
 					// by default, prunes "one of"
-					forcePruneAll := true
+					forcePruneAll := false
 					for _, nodeSelectorRequirement := range nodeSelectorRequirements {
 						if nodeSelectorRequirement.Key == expression.Key &&
 							nodeSelectorRequirement.Operator == expression.Operator &&
